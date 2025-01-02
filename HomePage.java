@@ -4,40 +4,39 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class HomePage extends JFrame {
-    private JFrame parentFrame;
-
     public HomePage(JFrame parentFrame, String role) {
         super("Home Page");
-        this.parentFrame = parentFrame; // Store reference to the parent frame
         this.setSize(400, 300);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
 
         setTitle("Home Page");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new GridLayout(6, 2)); // Adjusted layout for extra button
-        
+        setLayout(new BorderLayout());
 
-        // UI Elements
-        add(new JLabel("Select Day:"));
-        JComboBox<String> dayComboBox = new JComboBox<>(new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
-        add(dayComboBox);
+        // Form panel for inputs
+        JPanel formPanel = new JPanel(new GridLayout(6, 2));
+        formPanel.add(new JLabel("Select Day:"));
+        JComboBox<String> dayComboBox = new JComboBox<>(new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"});
+        formPanel.add(dayComboBox);
 
-        add(new JLabel("Select Month:"));
+        formPanel.add(new JLabel("Select Month:"));
         JComboBox<String> monthComboBox = new JComboBox<>(new String[]{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"});
-        add(monthComboBox);
+        formPanel.add(monthComboBox);
 
-        add(new JLabel("Select Section:"));
-        JComboBox<String> sectionComboBox = new JComboBox<>(new String[]{"A", "B", "C"});
-        add(sectionComboBox);
+        formPanel.add(new JLabel("Select Section:"));
+        JComboBox<String> sectionComboBox = new JComboBox<>(new String[]{"Garate L", "Ferreres W", "Sales top"});
+        formPanel.add(sectionComboBox);
 
+        add(formPanel, BorderLayout.CENTER);
+
+        // Button panel for Proceed and Back buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton proceedButton = new JButton("Proceed");
-        add(proceedButton);
-
         JButton backButton = new JButton("Back");
-        add(backButton);
+        buttonPanel.add(proceedButton);
+        buttonPanel.add(backButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
 
         // Action Listeners
         proceedButton.addActionListener(new ActionListener() {
@@ -45,45 +44,24 @@ public class HomePage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Check if the user is a teacher
                 if (role.equals("Teacher")) {
-                    // Proceed to the Teacher Panel
-                    
                     TeacherPanel teacherPanel = new TeacherPanel();
-                    teacherPanel.setVisible(true); // Show the Teacher Panel
-                    HomePage.this.dispose(); // Close the current HomePage
-                } else {
-                    // Handle other roles or show an error
-                    JOptionPane.showMessageDialog(HomePage.this, "Invalid role for this action.");
+                    teacherPanel.setVisible(true);
+                    HomePage.this.dispose();
+                } else if (role.equals("Beadle")) {
+                    BeadlePanel beadlePanel = new BeadlePanel(HomePage.this); // Pass current frame
+                    beadlePanel.setVisible(true);
+                    HomePage.this.dispose();
                 }
             }
         });
 
-         // Back button action
         backButton.addActionListener(e -> {
-            parentFrame.setVisible(true); // Show parent frame
+            MainApp.LoginPage loginpage = new MainApp.LoginPage(); // Use MainApp.LoginPage here
+            loginpage.setVisible(true); // Show LoginPage
             dispose(); // Close the current frame
         });
 
-            setVisible(true);
-            
-        }
 
-    public static void main(String[] args) {
-        // Create the parent frame (e.g., Main Menu)
-        JFrame mainMenu = new JFrame("Main Menu");
-        mainMenu.setSize(400, 300);
-        mainMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainMenu.setLayout(new FlowLayout());
-
-        JButton openHomePageButton = new JButton("Go to Home Page");
-        mainMenu.add(openHomePageButton);
-
-        // Action to open HomePage
-        openHomePageButton.addActionListener(e -> {
-            mainMenu.setVisible(false); // Hide main menu
-            new HomePage(mainMenu, "SomeRole"); // Pass the parent frame and a role string
- // Pass the main menu as the parent frame
-        });
-
-        mainMenu.setVisible(true);
+        setVisible(true);
     }
 }
