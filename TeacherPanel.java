@@ -10,22 +10,44 @@ public class TeacherPanel extends JFrame {
     private DefaultListModel<String> studentListModel;
     private JList<String> studentList;
     private JFrame homePage; // Reference to the HomePage
+    private String selectedSection;
+    private String selectedDay;
+    private String selectedMonth;
+    private String fileName;
 
 
     public TeacherPanel() {
-        this(null); // Call the other constructor with a default value
+        this(null, "", "", ""); // Call the other constructor with default values
     }
+
     // Constructor accepting HomePage reference
-    public TeacherPanel(JFrame homePage) {
+    public TeacherPanel(JFrame homePage, String selectedDay, String selectedMonth, String selectedSection) {
         this.homePage = homePage;
-        this.parent = parent;
+        this.selectedSection = selectedSection;
+        this.selectedDay = selectedDay;
+        this.selectedMonth = selectedMonth;
+        this.fileName = this.selectedDay + "_" + this.selectedMonth + "_" + this.selectedSection + ".txt";
         // Frame setup
         setTitle("Teacher Panel");
         setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
+        File sectionFile = new File(this.selectedSection + ".txt");
+        File attendanceFile = new File(this.fileName);
+        if (sectionFile.exists() && !attendanceFile.exists()) {
+            System.out.println(this.selectedSection);
+            try (BufferedReader reader = new BufferedReader(new FileReader(sectionFile)); //Ferreres.txt
+                 BufferedWriter writer = new BufferedWriter(new FileWriter(this.fileName))) { //1_January_Ferreres.txt
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         // Top panel for input
         JPanel topPanel = new JPanel(new BorderLayout());
         JLabel nameLabel = new JLabel("Enter Student Name:");
@@ -68,7 +90,7 @@ public class TeacherPanel extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Create an instance of the HomePage
-                HomePage homePage = new HomePage(TeacherPanel.this, "Home Page");
+                HomePage homePage = new HomePage(TeacherPanel.this, "Teacher");
                 
                 // Make the HomePage visible
                 homePage.setVisible(true);
@@ -83,7 +105,8 @@ public class TeacherPanel extends JFrame {
     }
 
     private void saveStudentList() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("students.txt", false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.fileName, false))) {
+            System.out.println(this.fileName);
             for (int i = 0; i < studentListModel.size(); i++) {
                 writer.write(studentListModel.get(i));
                 writer.newLine();
@@ -94,7 +117,8 @@ public class TeacherPanel extends JFrame {
     }
 
     private void loadStudentList() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("students.txt"))) {
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 studentListModel.addElement(line);
@@ -110,7 +134,7 @@ public class TeacherPanel extends JFrame {
             JFrame homePage = new HomePage(null, "Teacher"); // Pass required arguments
             homePage.setVisible(true);
     
-            TeacherPanel teacherPanel = new TeacherPanel(homePage);
+            TeacherPanel teacherPanel = new TeacherPanel(homePage, "", "", "");          
             teacherPanel.setVisible(true);
             homePage.setVisible(false); // Hide the HomePage while TeacherPanel is open
         });

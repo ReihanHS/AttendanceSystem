@@ -42,13 +42,16 @@ public class HomePage extends JFrame {
         proceedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Check if the user is a teacher
+                String selectedDay = (String) dayComboBox.getSelectedItem();
+                String selectedMonth = (String) monthComboBox.getSelectedItem();
+                String selectedSection = (String) sectionComboBox.getSelectedItem();
+
                 if (role.equals("Teacher")) {
-                    TeacherPanel teacherPanel = new TeacherPanel();
+                    TeacherPanel teacherPanel = new TeacherPanel(HomePage.this, selectedDay, selectedMonth, selectedSection);
                     teacherPanel.setVisible(true);
                     HomePage.this.dispose();
                 } else if (role.equals("Beadle")) {
-                    BeadlePanel beadlePanel = new BeadlePanel(HomePage.this); // Pass current frame
+                    BeadlePanel beadlePanel = new BeadlePanel(HomePage.this, selectedDay, selectedMonth, selectedSection);
                     beadlePanel.setVisible(true);
                     HomePage.this.dispose();
                 }
