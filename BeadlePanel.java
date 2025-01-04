@@ -5,96 +5,183 @@ import java.io.*;
 import java.util.*;
 
 public class BeadlePanel extends JFrame {
-    private JList<String> studentList;
+    private JFrame parent;
     private JComboBox<String> attendanceComboBox;
-    private JButton markButton, backButton;
+    private DefaultListModel<String> studentListModel;
+    private JList<String> studentList;
+    private JButton presentButton, lateButton, absentButton, backButton;
+    private String selectedDay;
+    private String selectedMonth;
+    private String selectedSection;
+    private String fileName;
+    private Map<String, String> attendanceStatus; // Store attendance status for each student
 
-    public BeadlePanel(JFrame parent) {
+
+    public BeadlePanel(JFrame parent, String selectedDay, String selectedMonth, String selectedSection) {
+        this.parent = parent;
+        this.selectedDay = selectedDay;
+        this.selectedMonth = selectedMonth;
+        this.selectedSection = selectedSection;
+        this.fileName = this.selectedDay + "_" + this.selectedMonth + "_" + this.selectedSection + ".txt";
+        this.attendanceStatus = new HashMap<>(); // Initialize the attendanceStatus map
         setTitle("Beadle Panel");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
         setLayout(new BorderLayout());
+        File sectionFile = new File(this.selectedSection + ".txt");
+        File attendanceFile = new File(this.fileName);
+        if (sectionFile.exists() && !attendanceFile.exists()) {
+            System.out.println(this.selectedSection);
+            try (BufferedReader reader = new BufferedReader(new FileReader(sectionFile)); //Ferreres.txt
+                 BufferedWriter writer = new BufferedWriter(new FileWriter(this.fileName))) { //1_January_Ferreres.txt
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        studentListModel = new DefaultListModel<>();
+        studentList = new JList<>(studentListModel);
+        studentList.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                String student = (String) value;
+                String status = attendanceStatus.get(student);
+                String displayText = student + (status != null ? " (" + status + ")" : "");
+                return super.getListCellRendererComponent(list, displayText, index, isSelected, cellHasFocus);
+            }
+        });
+
+        JScrollPane scrollPane = new JScrollPane(studentList);
+        add(scrollPane, BorderLayout.CENTER);
 
         // Load students from file
         DefaultListModel<String> listModel = new DefaultListModel<>();
-        loadStudentsFromFile("students.txt", listModel);
+
+        loadStudentsFromFile(this.fileName,  listModel);
         studentList = new JList<>(listModel);
         add(new JScrollPane(studentList), BorderLayout.CENTER);
 
         attendanceComboBox = new JComboBox<>(new String[] {"Present", "Absent", "Late"});
         add(attendanceComboBox, BorderLayout.NORTH);
 
-        // Create a panel for buttons
-        JPanel buttonPanel = new JPanel();
-        markButton = new JButton("Mark Attendance");
+        // Create button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        presentButton = new JButton("Present");
+        lateButton = new JButton("Late");
+        absentButton = new JButton("Absent");
         backButton = new JButton("Back");
-        buttonPanel.add(markButton);
+
+        buttonPanel.add(presentButton);
+        buttonPanel.add(lateButton);
+        buttonPanel.add(absentButton);
         buttonPanel.add(backButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Add action listeners
-        markButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedStudent = studentList.getSelectedValue();
-                if (selectedStudent != null) {
-                    String attendanceStatus = attendanceComboBox.getSelectedItem().toString();
-                    markAttendance(selectedStudent, attendanceStatus);
-                } else {
-                    JOptionPane.showMessageDialog(BeadlePanel.this,
-                        "Please select a student to mark attendance.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-
+        presentButton.addActionListener(e -> markAttendance("P"));
+        lateButton.addActionListener(e -> markAttendance("L"));
+        absentButton.addActionListener(e -> markAttendance("A"));
+        
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (parent != null) {
-                    parent.setVisible(true); // Show the parent frame
-                }
-                dispose(); // Close this frame
+                HomePage homePage = new HomePage(BeadlePanel.this, "Beadle");
+                homePage.setVisible(true);
+                BeadlePanel.this.dispose();
             }
         });
+        // Load students from file
+        loadStudentsFromFile(this.fileName,  studentListModel);
+        
+            
 
 
         setVisible(true);
     }
 
     private void loadStudentsFromFile(String fileName, DefaultListModel<String> listModel) {
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                listModel.addElement(line.trim()); // Add each line as a student name
+                String studentName = line.trim();
+                if (!studentName.isEmpty()) {
+                    listModel.addElement(studentName);
+                }
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,
-                "Error loading students from file: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading student list: " + e.getMessage());
         }
     }
 
-    private void markAttendance(String student, String status) {
-        // Simulate saving attendance to a file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("attendance.txt", true))) {
-            writer.write("Attendance for " + student + ": " + status);
-            writer.newLine();
+    private void markAttendance(String status) {
+        String selectedStudent = studentList.getSelectedValue();
+        if (selectedStudent == null) {
+            JOptionPane.showMessageDialog(this, "Please select a student first");
+            return;
+        }
+
+        // Get the base student name without any status
+        String baseStudentName = selectedStudent.split(" - ")[0];
+
+        // Status is already a single letter (P, A, or L)
+        char statusLetter = status.charAt(0);
+
+        try {
+            // Read all lines
+            java.util.List<String> lines = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // Get the base name of the current line without status
+                    String currentBaseName = line.split(" - ")[0];
+                    
+                    // If this is the selected student's line, update their status
+                    if (currentBaseName.equals(baseStudentName)) {
+                        lines.add(baseStudentName + " - " + statusLetter);
+                    } else {
+                        lines.add(line);
+                    }
+                }
+            }
+
+            // Write all lines back to file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+                for (String line : lines) {
+                    writer.write(line);
+                    writer.newLine();
+                }
+            }
+
+            // Update the list model to show the new status
+            DefaultListModel<String> model = (DefaultListModel<String>) studentList.getModel();
+            int index = studentList.getSelectedIndex();
+            if (index != -1) {
+                model.setElementAt(baseStudentName + " - " + statusLetter, index);
+            }
+
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,
-                "Error saving attendance: " + e.getMessage(),
+            JOptionPane.showMessageDialog(this, 
+                "Error updating attendance: " + e.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
-        System.out.println("Attendance for " + student + " marked as: " + status);
     }
-
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame homePage = new JFrame(); // Placeholder for parent frame
-            new BeadlePanel(homePage);
+            JFrame homePage = new HomePage(null, "Beadle"); // Pass required arguments
+            homePage.setVisible(true);
+    
+            BeadlePanel beadlePanel = new BeadlePanel(homePage, "", "", "");          
+            beadlePanel.setVisible(true);
+            homePage.setVisible(false);
         });
     }
 }
