@@ -1,41 +1,76 @@
-ARAJANI, ALLYSSANDRA C
-ASOMBRADO, DYLAN DENZEL R
-BACONGUIS, RYZ FRANCHESKA A
-BALMORI, REMUWEL JR E
-BONGCAYO, PATRICK B
-CLEMEÑA, ADRIAN A
-DALAUTA, JAMES C
-DELA TORRE, ALEXA ROSS B
-ESCUADRA, ERNEST MIGUEL C
-ESFANDIARY, F ANDREW S
-FALLER, HALBERT MELQUI T
-FANTILAGA, JOELLE CHRYSTIANNE M
-FERRER, JUDIEL MARCO L
-FORMENTERA, ROPHE A
-FRANCISCO, RHAYLE JACOB S
-GANESHBABU, SIDDHESH RAAM
-GELLECANIA, EZRA YSABELA G
-GEOLINA, JEFFREN JOHN R
-GIL, ULRICH JADREY J
-GONZAGA, PAULO RAFAEL B
-GUTIERREZ, ALVEAH KESIA M
-JUMAWAY, FRANCIS CARL P
-LABAO, WILHELM HANZ B
-LAMBERT, RIM AARON S
-MANDANAS, ANGELO M
-MANLOD, DENIEL JAKE C
-MIGUEL, SHAWN JANRY C
-NOEL, PHOENIX IEZEN G
-PARDILLO, LANCE GABRIEL L
-PASCUAL, SHROD ETHAN C
-PATAC, ANGELO S
-PULIDO, MIAMI PATRICE M
-REMULTA, SOPHIA ERNILDA U
-RUEDAS, BRYAN VHON CYRUS T
-SALIHUDDIN, REIHAN H
-SEARS, RYAN JAKE M
-SENSANO, ROBERT LAUREN B
-SUAREZ, JERAHMEEL L
-VILLAMOR, JOHN ALBERT D
-YU, CLARK STANLEY A
-YU, PHILLIP TYLER Y
+Abdul-Jabbar, Kareem
+Allen, Ray
+Antetokounmpo, Giannis
+Anthony, Carmelo
+Archibald, Nate
+Arizin, Paul
+Barkley, Charles
+Barry, Rick
+Baylor, Elgin
+Bing, Dave
+Bird, Larry
+Bryant, Kobe
+Chamberlain, Wilt
+Cousy, Bob
+Cowens, Dave
+Cunningham, Billy
+Curry, Stephen
+Davis, Anthony
+DeBusschere, Dave
+Drexler, Clyde
+Duncan, Tim
+Durant, Kevin
+Erving, Julius
+Ewing, Patrick
+Frazier, Walt
+Garnett, Kevin
+Gervin, George
+Greer, Hal
+Harden, James
+Havlicek, John
+Hayes, Elvin
+Iverson, Allen
+James, LeBron
+Johnson, Magic
+Jones, Sam
+Jordan, Michael
+Kidd, Jason
+Leonard, Kawhi
+Lillard, Damian
+Lucas, Jerry
+Malone, Karl
+Malone, Moses
+Maravich, Pete
+McAdoo, Bob
+McHale, Kevin
+Mikan, George
+Miller, Reggie
+Monroe, Earl
+Nash, Steve
+Nowitzki, Dirk
+Olajuwon, Hakeem
+O'Neal, Shaquille
+Parish, Robert
+Paul, Chris
+Payton, Gary
+Pettit, Bob
+Pierce, Paul
+Pippen, Scottie
+Reed, Willis
+Robertson, Oscar
+Robinson, David
+Rodman, Dennis
+Russell, Bill
+Schayes, Dolph
+Sharman, Bill
+Stockton, John
+Thomas, Isiah
+Thurmond, Nate
+Unseld, Wes
+Wade, Dwyane
+Walton, Bill
+West, Jerry
+Westbrook, Russell
+Wilkens, Lenny
+Wilkins, Dominique
+Worthy, James
