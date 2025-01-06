@@ -9,7 +9,7 @@ public class BeadlePanel extends JFrame {
     private JComboBox<String> attendanceComboBox;
     private DefaultListModel<String> studentListModel;
     private JList<String> studentList;
-    private JButton presentButton, lateButton, absentButton, backButton;
+    private JButton  lateButton, absentButton, backButton;
     private String selectedDay;
     private String selectedMonth;
     private String selectedSection;
@@ -66,24 +66,22 @@ public class BeadlePanel extends JFrame {
         studentList = new JList<>(listModel);
         add(new JScrollPane(studentList), BorderLayout.CENTER);
 
-        attendanceComboBox = new JComboBox<>(new String[] {"Present", "Absent", "Late"});
+        attendanceComboBox = new JComboBox<>(new String[] { "Absent", "Late"});
         add(attendanceComboBox, BorderLayout.NORTH);
 
         // Create button panel
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        presentButton = new JButton("Present");
+        
         lateButton = new JButton("Late");
         absentButton = new JButton("Absent");
         backButton = new JButton("Back");
 
-        buttonPanel.add(presentButton);
         buttonPanel.add(lateButton);
         buttonPanel.add(absentButton);
         buttonPanel.add(backButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Add action listeners
-        presentButton.addActionListener(e -> markAttendance("P"));
         lateButton.addActionListener(e -> markAttendance("L"));
         absentButton.addActionListener(e -> markAttendance("A"));
         
@@ -144,7 +142,7 @@ public class BeadlePanel extends JFrame {
                     
                     // If this is the selected student's line, update their status
                     if (currentBaseName.equals(baseStudentName)) {
-                        lines.add(baseStudentName + " - " + statusLetter);
+                        lines.add(baseStudentName + " * " + statusLetter);
                     } else {
                         lines.add(line);
                     }
@@ -163,7 +161,7 @@ public class BeadlePanel extends JFrame {
             DefaultListModel<String> model = (DefaultListModel<String>) studentList.getModel();
             int index = studentList.getSelectedIndex();
             if (index != -1) {
-                model.setElementAt(baseStudentName + " - " + statusLetter, index);
+                model.setElementAt(baseStudentName + " * " + statusLetter, index);
             }
 
         } catch (IOException e) {

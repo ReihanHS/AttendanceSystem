@@ -6,7 +6,7 @@ import java.io.*;
 public class TeacherPanel extends JFrame {
     private JFrame parent;
     private JTextField studentNameField;
-    private JButton addButton, backButton;
+    private JButton addButton, backButton, sendNotificationsButton;
     private DefaultListModel<String> studentListModel;
     private JList<String> studentList;
     private JFrame homePage; // Reference to the HomePage
@@ -14,6 +14,7 @@ public class TeacherPanel extends JFrame {
     private String selectedDay;
     private String selectedMonth;
     private String fileName;
+    
 
 
     public TeacherPanel() {
@@ -66,8 +67,10 @@ public class TeacherPanel extends JFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         addButton = new JButton("Add Student");
         backButton = new JButton("Back");
+        sendNotificationsButton = new JButton("Send Notifications");
         buttonPanel.add(addButton);
         buttonPanel.add(backButton);
+        buttonPanel.add(sendNotificationsButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
         // Load students from file
@@ -99,6 +102,10 @@ public class TeacherPanel extends JFrame {
                 TeacherPanel.this.dispose();
             }
         });
+        // Send Notifications button functionality
+        sendNotificationsButton.addActionListener(e -> {
+            sendAttendanceNotifications();
+        });
 
         // Show frame
         setVisible(true);
@@ -127,6 +134,36 @@ public class TeacherPanel extends JFrame {
             System.out.println("No saved students found. File might not exist yet.");
         }
     }
+    private void sendAttendanceNotifications() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("* L") || line.contains("* A")) {
+                    String studentName = line.replace("* L", "").replace("* A", "").trim();
+                    String status = line.contains("* L") ? "late" : "absent";
+                    System.out.println("\n----------------------------------------");
+                    System.out.println("Subject: Attendance Notification for " + studentName);
+                    System.out.println("\nDear Parent/Guardian of " + studentName + ",");
+                    System.out.println("\nI hope this email finds you well. I am writing to inform you that");
+                    System.out.println("your child, " + studentName + ", was marked as " + status);
+                    System.out.println("for today's class in " + selectedSection + ".");
+                    System.out.println("\nPlease ensure that your child maintains regular attendance and");
+                    System.out.println("punctuality as it is crucial for their academic progress.");
+                    System.out.println("\nIf you have any concerns, please don't hesitate to contact me.");
+                    System.out.println("\nBest regards,");
+                    System.out.println("Class Teacher");
+                    System.out.println("Section " + selectedSection);
+                    System.out.println("----------------------------------------");                    
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading attendance file: " + e.getMessage());
+        }    }
+        
+        
+            
+        
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

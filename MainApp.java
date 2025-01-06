@@ -13,22 +13,41 @@ public class MainApp {
         loadUserDatabase();
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Do you want to create an account? (yes/no)");
-        String response = scanner.nextLine().trim().toLowerCase();
+        String response;
+        boolean accessDenied = false;
+        boolean validInput = false;
 
-        if (response.equals("yes")) {
-            createAccount();
-        } else {
-            System.out.println("Proceeding to login...");
+        while (!validInput) {
+            System.out.println("Do you want to create an account? (yes/no)");
+            response = scanner.nextLine().trim().toLowerCase();
+            
+            if (response.equals("yes")) {
+                accessDenied = createAccount();
+                validInput = true;
+            } else if (response.equals("no")) {
+                System.out.println("Proceeding to login...");
+                validInput = true;
+            } else {
+                System.out.println("Invalid response. Please enter 'yes' or 'no'.");
+            }
         }
-
-        SwingUtilities.invokeLater(() -> new LoginPage().setVisible(true));
+        // if (!accessDenied && validInput) {
+            SwingUtilities.invokeLater(() -> new LoginPage().setVisible(true));
+        // }
     }
 
-    private static void createAccount() {
+    private static boolean createAccount() {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter a password to proceed creating an account: ");
+        String systemPassword = scanner.nextLine();
+
+        if (!systemPassword.equals("1234")) {
+            System.out.println("Invalid password! Access Denied.");
+           return true;            
+        }
 
         System.out.println("Create an account\n");
+
         System.out.print("Set a Username: ");
         String userSet = scanner.nextLine();
 
@@ -52,6 +71,8 @@ public class MainApp {
         userDatabase.put(userSet, passSet);
         saveUserDatabase();
         System.out.println("Account created successfully!");
+
+        return false;
     }
 
     private static void loadUserDatabase() {
@@ -89,6 +110,10 @@ public class MainApp {
             setSize(300, 200);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             setLocationRelativeTo(null);
+            setAlwaysOnTop(true);
+            
+            
+            
             setLayout(new GridLayout(4, 2));
 
             add(new JLabel("Username:"));
@@ -106,20 +131,33 @@ public class MainApp {
             loginButton = new JButton("Login");
             add(loginButton);
 
+            // SwingUtilities.invokeLater(() -> {
+            //     usernameField.requestFocusInWindow();
+            //     usernameField.selectAll();
+            // });
+            
+
             loginButton.addActionListener(e -> {
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
                 String role = roleComboBox.getSelectedItem().toString();
 
                 if (userDatabase.containsKey(username) && userDatabase.get(username).equals(password)) {
+                    System.out.println("if ");
+
                     JOptionPane.showMessageDialog(null, "Login successful as " + role);
                     new HomePage(LoginPage.this, role); // Proceed to HomePage based on role
                     LoginPage.this.setVisible(false);
                     dispose();
                 } else {
+                    System.out.println("else: ");
+
                     JOptionPane.showMessageDialog(LoginPage.this, "Invalid credentials.");
                 }
+                
             });
+            // toFront();
+            // requestFocus();
         }
     }
 }
