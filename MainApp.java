@@ -1,3 +1,10 @@
+//Members
+//Asombrado, Dylan Denzel
+//Faller, Halbert Melqui
+//Gil, Ulrich Jadrey
+//Miguel, Shawn Janry
+//Pascual, Shrod Ethan
+//Salihuddin, Reihan
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
