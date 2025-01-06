@@ -138,9 +138,9 @@ public class TeacherPanel extends JFrame {
         try (BufferedReader reader = new BufferedReader(new FileReader(this.fileName))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.contains("* L") || line.contains("* A")) {
-                    String studentName = line.replace("* L", "").replace("* A", "").trim();
-                    String status = line.contains("* L") ? "late" : "absent";
+                if (line.contains("- L") || line.contains("- A")) {
+                    String studentName = line.replace("- L", "").replace("- A", "").trim();
+                    String status = line.contains("- L") ? "late" : "absent";
                     System.out.println("\n----------------------------------------");
                     System.out.println("Subject: Attendance Notification for " + studentName);
                     System.out.println("\nDear Parent/Guardian of " + studentName + ",");

@@ -45,8 +45,16 @@ public class MainApp {
 
     private static boolean createAccount() {
         Scanner scanner = new Scanner(System.in);
+        Console console = System.console();
+        if (console == null) {
+            System.out.println("Console not available. Access Denied.");
+            return false;
+        }
+        
         System.out.println("Please enter a password to proceed creating an account: ");
-        String systemPassword = scanner.nextLine();
+        char[] passwordArray = console.readPassword();
+        String systemPassword = new String(passwordArray);
+        System.out.println("\n");
 
         if (!systemPassword.equals("1234")) {
             System.out.println("Invalid password! Access Denied.");
@@ -56,19 +64,26 @@ public class MainApp {
         System.out.println("Create an account\n");
 
         System.out.print("Set a Username: ");
-        String userSet = scanner.nextLine();
+        String userSet = console.readLine();  // Use console.readLine() instead of scanner.nextLine()
+        
 
         while (userDatabase.containsKey(userSet)) {
             System.out.println("Username already exists! Choose another.");
             System.out.print("Set a Username: ");
-            userSet = scanner.nextLine();
+            userSet = console.readLine();  // Use console.readLine() instead of scanner.nextLine()
         }
+        
+        
 
         System.out.print("Set a Password: ");
-        String passSet = scanner.nextLine();
+        char[] userPassArray = console.readPassword();
+        String passSet = new String(userPassArray);
+
+        
 
         System.out.print("Confirm your password: ");
-        String conf = scanner.nextLine();
+        char[] confArray = console.readPassword();
+        String conf = new String(confArray);
 
         while (!conf.equals(passSet)) {
             System.out.println("The password doesn't match! Type again:");
