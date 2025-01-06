@@ -14,7 +14,7 @@ public class MainApp {
 
         Scanner scanner = new Scanner(System.in);
         String response;
-        boolean accessDenied = false;
+        // boolean accessDenied = false;
         boolean validInput = false;
 
         while (!validInput) {
@@ -22,7 +22,7 @@ public class MainApp {
             response = scanner.nextLine().trim().toLowerCase();
             
             if (response.equals("yes")) {
-                accessDenied = createAccount();
+                createAccount();
                 validInput = true;
             } else if (response.equals("no")) {
                 System.out.println("Proceeding to login...");
@@ -36,15 +36,15 @@ public class MainApp {
         // }
     }
 
-    private static boolean createAccount() {
+    private static void createAccount() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter a password to proceed creating an account: ");
-        String systemPassword = scanner.nextLine();
+        // System.out.println("Please enter a password to proceed creating an account: ");
+        // String systemPassword = scanner.nextLine();
 
-        if (!systemPassword.equals("1234")) {
-            System.out.println("Invalid password! Access Denied.");
-           return true;            
-        }
+        // if (!systemPassword.equals("1234")) {
+        //     System.out.println("Invalid password! Access Denied.");
+        //    return true;            
+        // }
 
         System.out.println("Create an account\n");
 
@@ -72,7 +72,7 @@ public class MainApp {
         saveUserDatabase();
         System.out.println("Account created successfully!");
 
-        return false;
+        // return false;
     }
 
     private static void loadUserDatabase() {
