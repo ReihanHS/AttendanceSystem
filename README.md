@@ -1,5 +1,10 @@
-"# AttendanceSystem" 
 # AttendanceSystem
 
-Updated: 2021-04-24T14:39:47.000Z
-fix button
+A Java GUI attendance checker with teacher, beadle and student views.
+
+## Run
+
+```bash
+javac *.java
+java MainApp
+```
